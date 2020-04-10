@@ -9,3 +9,13 @@ services:
         volumes:
             - "./data/master:/data/"
             - "./master.conf:/etc/redis.conf"
+
+    redis-slave:
+        container_name: "redis-slave"
+        image: redis
+        ports:
+            - "6388:6379"
+        command: "redis-server /etc/redis.conf"
+        volumes:
+            - "./data/slave:/data/"
+            - "./slave.conf:/etc/redis.conf"
