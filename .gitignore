@@ -1,3 +1,7 @@
+# redis
+*.rdb
+*.aof
+
 # Compiled class file
 *.class
 
