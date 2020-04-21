@@ -2,12 +2,24 @@ server:
   port: 9080
 
 spring:
+  cache:
+    type: redis
+    redis:
+      cache-null-values:  false
+      time-to-live: 600000
+      use-key-prefix: false
+      
+  redis:
+    host: localhost
+    port: 6379
+    
   data:
     mongodb:
       uri: mongodb://test:test@localhost:27017/testdb
       username: test
       password: test
       port: 27017
+
   
 logging:
   level:
