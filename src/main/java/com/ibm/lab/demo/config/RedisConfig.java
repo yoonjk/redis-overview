@@ -5,6 +5,7 @@ import java.time.Duration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -70,7 +71,24 @@ public class RedisConfig {
 		return redisTemplate;
 	}
      
-
+//   @Bean("customKeyGenerator")
+//    public KeyGenerator keyGenerator() {
+//        return new CustomKeyGenerator();
+//    }
+   
+   @Bean("customKeyGenerator")
+   public KeyGenerator keyGenerator() {
+       return (target, method, params) -> {
+           StringBuffer key = new StringBuffer();
+           key.append(target.getClass().getSimpleName() + "#" + method.getName() + "(");
+           for (Object args : params) {
+               key.append(args + ",");
+           }
+           key.deleteCharAt(key.length() - 1);
+           key.append(")");
+           return key.toString();
+       };
+   }
     
 	@Bean(name = "cacheManager")
     public CacheManager cacheManager() {
@@ -79,8 +97,9 @@ public class RedisConfig {
         // 값은 json 문자열로 넣는다. @class 필드로 클래스 정보가 들어간다.
         RedisCacheConfiguration defaultConfig =
                 RedisCacheConfiguration.defaultCacheConfig()
-                                       .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
-                                       .entryTtl(Duration.ofSeconds(CacheKey.USER_EXPIRE_SEC));
+                						.disableCachingNullValues()
+                						.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))
+                						.entryTtl(Duration.ofSeconds(CacheKey.USER_EXPIRE_SEC));
 
         builder.cacheDefaults(defaultConfig);
 

@@ -65,7 +65,7 @@ public class PersonController {
 		return personService.delete(firstName);
 	}
 	
-	@CacheEvict(value="person", allEntries=true)
+	@CacheEvict(value="persons", allEntries=true)
 	@DeleteMapping("/persons")
 	public String deleteAll() {
 		logger.info("deleted all records");

@@ -2,6 +2,7 @@ server:
   port: 9080
 
 spring:
+  main.allow-bean-definition-overriding: true
   cache:
     type: redis
     redis:
@@ -15,11 +16,7 @@ spring:
     
   data:
     mongodb:
-      uri: mongodb://test:test@localhost:27017/testdb
-      username: test
-      password: test
-      port: 27017
-
+      uri:  mongodb://test:test@localhost:27017/testdb
   
 logging:
   level:
