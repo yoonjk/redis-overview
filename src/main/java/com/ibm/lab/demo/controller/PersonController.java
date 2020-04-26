@@ -44,14 +44,14 @@ public class PersonController {
 		return personService.getAll();
 	}
 	
-	@Cacheable(value="person", key="person#firstName")
+	@Cacheable(value="person", key="#person.firstName")
 	@PostMapping("/persons")
 	public Person create(@RequestBody Person person) {
 		logger.info("create record:{}", person);
 		return personService.create(person);
 	}
 	
-	@CachePut(value="person", key="person#firstName")
+	@CachePut(value="person", key="#person.firstName")
 	@PutMapping("/persons")
 	public Person update(@RequestBody Person person) {
 		logger.info("Update record:{}", person);
@@ -65,7 +65,7 @@ public class PersonController {
 		return personService.delete(firstName);
 	}
 	
-	@CacheEvict(value="persons", allEntries=true)
+	@CacheEvict(value="person", allEntries=true)
 	@DeleteMapping("/persons")
 	public String deleteAll() {
 		logger.info("deleted all records");
